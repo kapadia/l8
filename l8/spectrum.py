@@ -81,7 +81,10 @@ def extract(scene_directory, longitude, latitude, bands=[]):
             x0, y0 = pyproj.transform(src_proj, dst_proj, longitude, latitude)
             
             # Get the incremented pixel with respect to x/y
-            pixel = map(lambda p: p[0] + 1, src.window(x0, y0, x0, y0))
+            try:
+                pixel = map(lambda p: p[0] + 1, src.window(x0, y0, x0, y0))
+            except ValueError:
+                return np.nan
             
             x1, y1 = src.ul(*pixel)
             
