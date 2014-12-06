@@ -26,12 +26,12 @@ BANDS = {
 }
 
 
-def extract(scene_dirs, lng, lat, bands=[]):
+def extract(scene_directory, lng, lat, bands=[]):
     """
-    Extract values from a list of scene directories at a specified location.
+    Extract pixel values at a specified geographic location.
     
-    :param scene_dir:
-        List of paths pointing to Landsat 8 directories. Each path
+    :param scene_directory:
+        Directory point to Landsat 8 images. The path is 
         is assumed to be composed of a Landsat8 scene id.
         
         LXSPPPRRRYYYYDDDGSIVV
@@ -59,25 +59,10 @@ def extract(scene_dirs, lng, lat, bands=[]):
     if len(bands) == 0:
         bands = BANDS.keys()
     
-    # Get scene ids from scene directories
-    scene_ids = map(lambda x: os.path.basename(os.path.normpath(x)), scene_dirs)
-    items = [
-        {
-            "directory": scene_dirs[index],
-            "id": scene_id
-        } for index, scene_id in enumerate(scene_ids)
-    ]
-    
-    def get_year(scene_id):
-        return scene_id[9:13]
-    
-    def get_doy(scene_id):
-        return scene_id[13:16]
-    
-    scenes = sorted(items, key=lambda x: (get_year(x["id"]), get_doy(x["id"])))
-    
-    # Directories are now sorted by date.
-    # Proceed to extract pixels from each image.
+    scene = {
+        "directory": scene_directory,
+        "id": os.path.basename(os.path.normpath(scene_directory))
+    }
     
     src_proj = pyproj.Proj(init='epsg:4326')
     
@@ -106,9 +91,7 @@ def extract(scene_dirs, lng, lat, bands=[]):
             window = src.window(xmin, ymin, xmax, ymax)
             
             return src.read_band(1, window=window)[0][0]
-    
-    for scene in scenes:
         
-        with rio.drivers():
-            scene_values = map(lambda band: get_value_from_band(scene, band), bands)
-            print scene_values
+    with rio.drivers():
+        scene_values = map(lambda band: get_value_from_band(scene, band), bands)
+        print scene_values
