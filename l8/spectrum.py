@@ -26,7 +26,7 @@ BANDS = {
 }
 
 
-def extract(scene_directory, lng, lat, bands=[]):
+def extract(scene_directory, longitude, latitude, bands=[]):
     """
     Extract pixel values at a specified geographic location.
     
@@ -45,10 +45,10 @@ def extract(scene_directory, lng, lat, bands=[]):
         GSI = Ground station identifier
         VV = Archive version number
     
-    :param lng:
+    :param longitude:
         The longitude to sample in each image.
     
-    :param lat:
+    :param latitude:
         The latitude to sample in each image.
         
     :param bands:
@@ -75,10 +75,10 @@ def extract(scene_directory, lng, lat, bands=[]):
         
         with rio.open(srcpath, "r") as src:
             
-            # Get the window associated with the given lng/lat
+            # Get the window associated with the given longitude/latitude
             
             dst_proj = pyproj.Proj(src.crs)
-            x0, y0 = pyproj.transform(src_proj, dst_proj, lng, lat)
+            x0, y0 = pyproj.transform(src_proj, dst_proj, longitude, latitude)
             
             # Get the incremented pixel with respect to x/y
             pixel = map(lambda p: p[0] + 1, src.window(x0, y0, x0, y0))
