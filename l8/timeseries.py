@@ -8,7 +8,7 @@ import pyproj
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from l8 import spectrum
+from l8 import BANDS, spectrum
 
 sns.set()
 
@@ -47,10 +47,10 @@ def extract(scene_directories, longitude, latitude, bands=[]):
         bands = BANDS.keys()
     
     # Get scene ids from scene directories
-    scene_ids = map(lambda x: os.path.basename(os.path.normpath(x)), scene_dirs)
+    scene_ids = map(lambda x: os.path.basename(os.path.normpath(x)), scene_directories)
     items = [
         {
-            "directory": scene_dirs[index],
+            "directory": scene_directories[index],
             "id": scene_id
         } for index, scene_id in enumerate(scene_ids)
     ]
