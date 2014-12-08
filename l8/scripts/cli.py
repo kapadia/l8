@@ -14,7 +14,7 @@ def l8():
 @click.option('--longitude')
 @click.option('--latitude')
 def spectrum(directory, longitude, latitude):
-    l8spectrum.extract(directory, longitude, latitude)
+    print l8spectrum.extract(directory, longitude, latitude)
 
 
 @click.command('timeseries')
@@ -22,7 +22,7 @@ def spectrum(directory, longitude, latitude):
 @click.option('--longitude')
 @click.option('--latitude')
 def timeseries(directories, longitude, latitude):
-    l8timeseries.extract(directories, longitude, latitude)
+    print l8timeseries.extract(directories, longitude, latitude)
 
 
 l8.add_command(spectrum)

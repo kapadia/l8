@@ -84,4 +84,4 @@ def extract(scene_directory, longitude, latitude, bands=[]):
         
     with rio.drivers():
         scene_values = map(lambda band: get_value_from_band(scene, band), bands)
-        print scene_values
+        return scene_values

@@ -65,7 +65,10 @@ def extract(scene_directories, longitude, latitude, bands=[]):
     
     # Directories are now sorted by date.
     # Proceed to extract pixels from each image.
-    
+    spectra = []
     for scene in scenes:
-        spectrum.extract(scene["directory"], longitude, latitude, bands=bands)
+        spectra.append(
+            spectrum.extract(scene["directory"], longitude, latitude, bands=bands)
+        )
+    return spectra
     
