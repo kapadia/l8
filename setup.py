@@ -12,7 +12,7 @@ install_requires = [
     'rasterio>=0.15.1',
     'pyproj>=1.9.3',
     'matplotlib>=1.4.2',
-    'seaborn>=0.5.1'
+    'seaborn>=0.5.0'
 ]
 
 setup(name='l8',
