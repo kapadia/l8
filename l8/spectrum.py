@@ -4,6 +4,8 @@ import sys
 import numpy as np
 import rasterio as rio
 import pyproj
+from skimage.exposure import rescale_intensity
+from PIL import Image
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -13,7 +15,7 @@ from l8 import BANDS
 sns.set()
 
 
-def extract(scene_directory, longitude, latitude, bands=[], render_image=False):
+def extract(scene_directory, longitude, latitude, bands=[], imgpath=None):
     """
     Extract pixel values at a specified geographic location.
     
@@ -42,14 +44,14 @@ def extract(scene_directory, longitude, latitude, bands=[], render_image=False):
         The band(s) for which the timeseries will be extracted. Default is
         an empty list representing all bands.
     
-    :param render_image:
-        Boolean value. Renders a 100x100 patch surrounding the given longitude/latitude.
+    :param imgpath:
+        Path to an output image of a 101x101 patch surrounding the given longitude/latitude.
     """
     
     if len(bands) == 0:
         bands = BANDS.keys()
     
-    padding = 50 if render_image else 0
+    padding = 50 if imgpath else 0
     
     scene = {
         "directory": scene_directory,
@@ -89,8 +91,28 @@ def extract(scene_directory, longitude, latitude, bands=[], render_image=False):
             smax, tmax = max(s0, s1), max(t0, t1)
             
             window = src.window(smin, tmin, smax, tmax)
-            return src.read_band(1, window=window)[0][0]
+            band = src.read_band(1, window=window)
+            return band
         
     with rio.drivers():
-        scene_values = map(lambda band: get_value_from_band(scene, band), bands)
-        return scene_values
+        
+        spectral_images = map(lambda band: get_value_from_band(scene, band), bands)
+        
+        # Create image plots for the patch surrounding the given coordinates
+        if imgpath:
+            ridx = bands.index("Red")
+            gidx = bands.index("Green")
+            bidx = bands.index("Blue")
+            r, g, b = spectral_images[ridx], spectral_images[gidx], spectral_images[bidx]
+            
+            img = rescale_intensity(
+                np.dstack((r, g, b)),
+                in_range=(0, 20000),
+                out_range=(0, 255)
+            ).astype(np.uint8)
+            
+            im = Image.fromarray(img)
+            im.save(imgpath)
+        
+        spectral_values = map(lambda img: img[padding][padding], spectral_images)
+        return spectral_values
