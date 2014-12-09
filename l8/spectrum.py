@@ -13,7 +13,7 @@ from l8 import BANDS
 sns.set()
 
 
-def extract(scene_directory, longitude, latitude, bands=[]):
+def extract(scene_directory, longitude, latitude, bands=[], render_image=False):
     """
     Extract pixel values at a specified geographic location.
     
@@ -41,10 +41,15 @@ def extract(scene_directory, longitude, latitude, bands=[]):
     :param bands:
         The band(s) for which the timeseries will be extracted. Default is
         an empty list representing all bands.
+    
+    :param render_image:
+        Boolean value. Renders a 100x100 patch surrounding the given longitude/latitude.
     """
     
     if len(bands) == 0:
         bands = BANDS.keys()
+    
+    padding = 50 if render_image else 0
     
     scene = {
         "directory": scene_directory,
@@ -64,22 +69,26 @@ def extract(scene_directory, longitude, latitude, bands=[]):
             
             # Get the window associated with the given longitude/latitude
             
+            # Transform from longitude/latitude to the projection of the image
             dst_proj = pyproj.Proj(src.crs)
-            x0, y0 = pyproj.transform(src_proj, dst_proj, longitude, latitude)
+            s, t = pyproj.transform(src_proj, dst_proj, longitude, latitude)
             
-            # Get the incremented pixel with respect to x/y
+            # Get the center pixel corresponding to s/t
             try:
-                pixel = map(lambda p: p[0] + 1, src.window(x0, y0, x0, y0))
+                xc, yc = src.index(s, t)
             except ValueError:
                 return np.nan
             
-            x1, y1 = src.ul(*pixel)
+            x0, y0 = xc - padding, yc - padding
+            x1, y1 = xc + padding + 1, yc + padding + 1
             
-            xmin, ymin = min(x0, x1), min(y0, y1)
-            xmax, ymax = max(x0, x1), max(y0, y1)
+            s0, t0 = src.ul(x0, y0)
+            s1, t1 = src.ul(x1, y1)
             
-            window = src.window(xmin, ymin, xmax, ymax)
+            smin, tmin = min(s0, s1), min(t0, t1)
+            smax, tmax = max(s0, s1), max(t0, t1)
             
+            window = src.window(smin, tmin, smax, tmax)
             return src.read_band(1, window=window)[0][0]
         
     with rio.drivers():
