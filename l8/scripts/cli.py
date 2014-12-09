@@ -2,6 +2,7 @@
 import click
 from l8 import spectrum as l8spectrum
 from l8 import timeseries as l8timeseries
+from l8 import histogram as l8histogram
 
 
 @click.group()
@@ -27,5 +28,14 @@ def timeseries(directories, longitude, latitude):
         print spectrum
 
 
+@click.command('histogram')
+@click.argument('srcpath', nargs=1)
+def histogram(srcpath):
+    bin_edges, histogram = l8histogram.extract(srcpath)
+    print list(bin_edges)
+    print list(histogram)
+
+
 l8.add_command(spectrum)
 l8.add_command(timeseries)
+l8.add_command(histogram)
