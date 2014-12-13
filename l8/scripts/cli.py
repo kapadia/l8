@@ -11,16 +11,16 @@ def l8():
 
 @click.command('spectrum')
 @click.argument('directory', type=click.Path(exists=True))
-@click.option('--longitude')
-@click.option('--latitude')
+@click.option('--longitude', prompt=True)
+@click.option('--latitude', prompt=True)
 def spectrum(directory, longitude, latitude):
     l8spectrum.extract(directory, longitude, latitude)
 
 
 @click.command('timeseries')
 @click.argument('directories', nargs=-1)
-@click.option('--longitude')
-@click.option('--latitude')
+@click.option('--longitude', prompt=True)
+@click.option('--latitude', prompt=True)
 def timeseries(directories, longitude, latitude):
     l8timeseries.extract(directories, longitude, latitude)
 
