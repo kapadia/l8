@@ -11,7 +11,7 @@ install_requires = [
     'click',
     'rasterio>=0.15.1',
     'pyproj>=1.9.3',
-    'matplotlib>=1.4.2',
+    'matplotlib>=1.4.0',
     'seaborn>=0.5.1'
 ]
 
