@@ -3,6 +3,7 @@ import click
 from l8 import spectrum as l8spectrum
 from l8 import timeseries as l8timeseries
 from l8 import histogram as l8histogram
+from l8 import cfmask as l8cfmask
 
 
 @click.group()
@@ -34,7 +35,15 @@ def histogram(srcpath):
     print list(bin_edges)
     print list(histogram)
 
+@click.command('cfmask')
+@click.argument('srcpath', type=click.Path(exists=True))
+@click.argument('dstpath')
+def cfmask(srcpath, dstpath):
+    
+    l8cfmask.get_cloud_mask(srcpath, dstpath)
+
 
 l8.add_command(spectrum)
 l8.add_command(timeseries)
 l8.add_command(histogram)
+l8.add_command(cfmask)
