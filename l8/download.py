@@ -7,6 +7,12 @@ BUCKET = 'landsat-pds'
 
 
 def get_s3_path(sceneid):
+    """
+    Get the path on S3 for a given Landsat 8 scene id.
+    
+    :param sceneid:
+        Landsat 8 scene id
+    """
     
     pattern = "[A-Z]{2}8(?P<path>[0-9]{3})(?P<row>[0-9]{3})(?P<year>[0-9]{4})(?P<doy>[0-9]{3})[A-Z]{3}[0-9]{2}"
     match = re.match(pattern, sceneid)
@@ -14,11 +20,23 @@ def get_s3_path(sceneid):
     path = match.group('path')
     row = match.group('row')
     
-    s3path = os.path.join('L8', path, row, sceneid)
-    return s3path
+    return os.path.join('L8', path, row, sceneid)
 
 
 def download(sceneid, dstpath, bands):
+    """
+    Download Landsat 8 data from a stash on S3.
+    
+    :param sceneid:
+        Landsat 8 scene id
+    
+    :param dstpath:
+        Local path where files will be downloaded.
+        
+    :param bands:
+        List of bands that will be downloaded. Must be [1 ... 11, BQA]
+    """
+    
     s3path = get_s3_path(sceneid)
     s3keys = map(lambda b: os.path.join(s3path, sceneid + "_B%s.TIF" % b), bands)
     
