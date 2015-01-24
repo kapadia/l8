@@ -3,6 +3,7 @@ import click
 from l8 import spectrum as l8spectrum
 from l8 import timeseries as l8timeseries
 from l8 import histogram as l8histogram
+from l8 import download as l8download
 
 
 @click.group()
@@ -35,7 +36,15 @@ def histogram(srcpath):
     print list(bin_edges)
     print list(histogram)
 
+@click.command('download')
+@click.argument('sceneid')
+@click.argument('dstpath', default=None, type=click.Path(exists=True))
+@click.argument('bands', nargs=-1, type=click.Choice([ '%d' % i for i in range(1, 12)] + ['BQA', 'MTL']))
+def download(sceneid, dstpath, bands):
+    l8download.download(sceneid, dstpath, bands)
+
 
 l8.add_command(spectrum)
 l8.add_command(timeseries)
 l8.add_command(histogram)
+l8.add_command(download)
