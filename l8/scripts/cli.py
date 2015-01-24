@@ -5,6 +5,7 @@ from l8 import timeseries as l8timeseries
 from l8 import histogram as l8histogram
 from l8 import download as l8download
 from l8 import cfmask as l8cfmask
+from l8 import mapbox as l8mapbox
 
 
 @click.group()
@@ -40,7 +41,7 @@ def histogram(srcpath):
 @click.command('download')
 @click.argument('sceneid')
 @click.argument('dstpath', default=None, type=click.Path(exists=True))
-@click.argument('bands', nargs=-1, type=click.Choice([ '%d' % i for i in range(1, 12)] + ['BQA', 'MTL']))
+@click.argument('bands', nargs=-1, type=click.Choice([ '%d' % i for i in range(1, 12)] + ['BQA']))
 def download(sceneid, dstpath, bands):
     l8download.download(sceneid, dstpath, bands)
 
@@ -52,8 +53,20 @@ def cfmask(srcpath, dstpath):
     l8cfmask.get_cloud_mask(srcpath, dstpath)
 
 
+
+@click.command('mapbox')
+@click.argument('sceneid')
+@click.argument('band', type=click.Choice([ '%d' % i for i in range(1, 12)] + ['BQA']))
+@click.argument('username')
+@click.argument('mapid')
+@click.argument('access_token')
+def mapbox(sceneid, band, username, mapid, access_token):
+    l8mapbox.mapbox(sceneid, band, username, mapid, access_token)
+
+
 l8.add_command(spectrum)
 l8.add_command(timeseries)
 l8.add_command(histogram)
 l8.add_command(download)
 l8.add_command(cfmask)
+l8.add_command(mapbox)
