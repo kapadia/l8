@@ -1,4 +1,6 @@
 
+__version__ = '0.1.0'
+
 BANDS = {
     "Coastal aerosol": 1,
     "Blue": 2,
