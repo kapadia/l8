@@ -9,11 +9,10 @@ with codecs_open('README.rst', encoding='utf-8') as f:
 
 install_requires = [
     'click',
-    'boto',
-    'rasterio>=0.15.1',
+    'numpy',
+    'rasterio',
     'pyproj>=1.9.3',
-    'matplotlib>=1.4.0',
-    'seaborn>=0.5.0'
+    'boto'
 ]
 
 setup(name='l8',
