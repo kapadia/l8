@@ -3,6 +3,8 @@ import os
 import re
 from boto.s3.connection import S3Connection
 
+from l8 import SCENE_ID_PATTERN
+
 BUCKET = 'landsat-pds'
 
 
@@ -14,8 +16,7 @@ def get_s3_path(sceneid):
         Landsat 8 scene id
     """
     
-    pattern = "[A-Z]{2}8(?P<path>[0-9]{3})(?P<row>[0-9]{3})(?P<year>[0-9]{4})(?P<doy>[0-9]{3})[A-Z]{3}[0-9]{2}"
-    match = re.match(pattern, sceneid)
+    match = re.match(SCENE_ID_PATTERN, sceneid)
     
     path = match.group('path')
     row = match.group('row')
