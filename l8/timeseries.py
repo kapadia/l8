@@ -1,6 +1,6 @@
 
 import os
-import sys
+import re
 import numpy as np
 import rasterio as rio
 import pyproj
@@ -8,7 +8,7 @@ import pyproj
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from l8 import BANDS, spectrum
+from l8 import BANDS, SCENE_ID_PATTERN, spectrum
 
 sns.set()
 
@@ -61,11 +61,20 @@ def extract(scene_directories, longitude, latitude, bands=[]):
         an empty list representing all bands.
     """
     
+    def is_scene_directory(srcpath):
+        sid = os.path.basename(os.path.normpath(srcpath))
+        return re.match(SCENE_ID_PATTERN, sid) is not None
+    
+    print scene_directories
+    scene_directories = filter(is_scene_directory, scene_directories)
+    print scene_directories
+    
     if len(bands) == 0:
         bands = BANDS.keys()
     
     # Get scene ids from scene directories
     scene_ids = map(lambda x: os.path.basename(os.path.normpath(x)), scene_directories)
+    
     items = [
         {
             "directory": scene_directories[index],
