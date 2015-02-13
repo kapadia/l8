@@ -65,9 +65,7 @@ def extract(scene_directories, longitude, latitude, bands=[]):
         sid = os.path.basename(os.path.normpath(srcpath))
         return re.match(SCENE_ID_PATTERN, sid) is not None
     
-    print scene_directories
     scene_directories = filter(is_scene_directory, scene_directories)
-    print scene_directories
     
     if len(bands) == 0:
         bands = BANDS.keys()
