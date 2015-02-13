@@ -13,6 +13,24 @@ from l8 import BANDS, spectrum
 sns.set()
 
 
+def sort_by_date(items, accessor=None):
+    
+    def get_date(sceneid):
+        return sceneid[9:16]
+    
+    if accessor is not None:
+        
+        def key(item):
+            sceneid = accessor(item)
+            return get_date(sceneid)
+    
+    else:
+        key=get_date
+    
+    
+    return sorted(items, key=key)
+
+
 def extract(scene_directories, longitude, latitude, bands=[]):
     """
     Extract values from a list of scene directories at a specified location.
@@ -55,13 +73,7 @@ def extract(scene_directories, longitude, latitude, bands=[]):
         } for index, scene_id in enumerate(scene_ids)
     ]
     
-    def get_year(scene_id):
-        return scene_id[9:13]
-    
-    def get_doy(scene_id):
-        return scene_id[13:16]
-    
-    scenes = sorted(items, key=lambda x: (get_year(x["id"]), get_doy(x["id"])))
+    scenes = sort_by_date(items, accessor=lambda x: x["id"])
     
     # Directories are now sorted by date.
     # Proceed to extract pixels from each image.
@@ -70,5 +82,5 @@ def extract(scene_directories, longitude, latitude, bands=[]):
         spectra.append(
             spectrum.extract(scene["directory"], longitude, latitude, bands=bands)
         )
-    return spectra
+    return np.array(spectra)
     

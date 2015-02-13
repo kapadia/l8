@@ -92,6 +92,7 @@ def extract(scene_directory, longitude, latitude, bands=[], imgpath=None):
             
             window = src.window(smin, tmin, smax, tmax)
             band = src.read_band(1, window=window)
+            
             return band
         
     with rio.drivers():
