@@ -16,3 +16,6 @@ BANDS = {
 }
 
 SCENE_ID_PATTERN = "[A-Z]{2}8(?P<path>[0-9]{3})(?P<row>[0-9]{3})(?P<year>[0-9]{4})(?P<doy>[0-9]{3})[A-Z]{3}[0-9]{2}"
+
+def get_date(sceneid):
+    return int(sceneid[9:16])
