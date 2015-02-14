@@ -87,7 +87,8 @@ def test_timeseries():
     lng = -120.10872499999999
     lat = 38.90009722222222
     
-    expected = np.array([
+    expected_dates = np.array([2013115, 2014086])
+    expected_ts = np.array([
         [34062, 20473, 20070, 32642, 34807, 5104, 5855, 28332, 5626, 35822, 32081],
         [37562, 14776, 15506, 35895, 36769, 5401, 11218, 33318, 11152, 39184, 42101]
     ])
@@ -95,7 +96,8 @@ def test_timeseries():
     data_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
     scene_dirs = map(lambda d: os.path.join(data_dir, d), os.listdir(data_dir))
     
-    ts = timeseries.extract(scene_dirs, lng, lat)
+    dates, ts = timeseries.extract(scene_dirs, lng, lat)
     
-    assert np.array_equal(ts, expected)
+    assert np.array_equal(dates, expected_dates)
+    assert np.array_equal(ts, expected_ts)
     
