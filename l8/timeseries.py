@@ -8,15 +8,13 @@ import pyproj
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from l8 import BANDS, SCENE_ID_PATTERN, spectrum
+from l8 import BANDS, SCENE_ID_PATTERN, get_date, spectrum
 
 sns.set()
 
 
+
 def sort_by_date(items, accessor=None):
-    
-    def get_date(sceneid):
-        return sceneid[9:16]
     
     if accessor is not None:
         
@@ -81,13 +79,15 @@ def extract(scene_directories, longitude, latitude, bands=[]):
     ]
     
     scenes = sort_by_date(items, accessor=lambda x: x["id"])
+    dates = np.array(map(get_date, scene_ids))
     
     # Directories are now sorted by date.
     # Proceed to extract pixels from each image.
-    spectra = []
+    ts = []
     for scene in scenes:
-        spectra.append(
+        ts.append(
             spectrum.extract(scene["directory"], longitude, latitude, bands=bands)
         )
-    return np.array(spectra)
+    
+    return (dates, np.array(ts))
     
