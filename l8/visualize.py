@@ -133,15 +133,15 @@ def timepointKDE(srcpaths, lng, lat, timeseries, timepoint):
     
     ax = axes_iter.next()
     sns.kdeplot(b, r, shade=True, cut=5, ax=ax)
-    ax.scatter(b[idx], r[idx])
+    ax.scatter(b[idx], r[idx], c='#3498db', s=200, alpha=0.5)
     
     ax = axes_iter.next()
     sns.kdeplot(g, ir, shade=True, cut=5, ax=ax)
-    ax.scatter(g[idx], ir[idx])
+    ax.scatter(g[idx], ir[idx], c='#3498db', s=200, alpha=0.5)
     
     ax = axes_iter.next()
     sns.kdeplot(b - r, g - ir, shade=True, cut=5, ax=ax)
-    ax.scatter(b[idx] - r[idx], g[idx] - ir[idx])
+    ax.scatter(b[idx] - r[idx], g[idx] - ir[idx], c='#3498db', s=200, alpha=0.5)
     
     plt.tight_layout()
 
