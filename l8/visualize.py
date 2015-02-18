@@ -140,7 +140,7 @@ def timepointKDE(srcpaths, lng, lat, timeseries, timepoint):
     ax.scatter(g[idx], ir[idx])
     
     ax = axes_iter.next()
-    sns.kdeplot(b - r, g - ir, shade=True, cut=5, ax=axes_iter.next())
+    sns.kdeplot(b - r, g - ir, shade=True, cut=5, ax=ax)
     ax.scatter(b[idx] - r[idx], g[idx] - ir[idx])
     
     plt.tight_layout()
