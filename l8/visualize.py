@@ -7,7 +7,7 @@ from skimage.exposure import rescale_intensity
 from l8 import BANDS
 
 
-def subimage(scene_directory, longitude, latitude, bands=[4, 3, 2]):
+def subimage(scene_directory, longitude, latitude, bands=[4, 3, 2], size=50):
     """
     Get a subimage around the given coordinates to visualize in a notebook.
     
@@ -35,7 +35,6 @@ def subimage(scene_directory, longitude, latitude, bands=[4, 3, 2]):
     :param bands:
         The bands that will be used for the false color image.
     """
-    padding = 50
     
     scene = {
         "directory": scene_directory,
@@ -65,8 +64,8 @@ def subimage(scene_directory, longitude, latitude, bands=[4, 3, 2]):
             except ValueError:
                 return np.nan
             
-            x0, y0 = xc - padding, yc - padding
-            x1, y1 = xc + padding + 1, yc + padding + 1
+            x0, y0 = xc - size, yc - size
+            x1, y1 = xc + size + 1, yc + size + 1
             
             s0, t0 = src.ul(x0, y0)
             s1, t1 = src.ul(x1, y1)
