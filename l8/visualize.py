@@ -115,11 +115,12 @@ def timepointKDE(srcpaths, lng, lat, timeseries, timepoint):
     srcpaths = l8.timeseries.sort_by_date(srcpaths, accessor=lambda p: os.path.basename(os.path.normpath(p)))
     
     # Get the scene path corresponding to the given timepoint
-    srcpath = ''.join([srcpath for srcpath in srcpaths if timepoint in srcpath])
+    srcpath = ''.join([srcpath for srcpath in srcpaths if str(timepoint) in srcpath])
     
     f, axes = plt.subplots(2, 2)
+    axes_iter = axes.flat
     
-    ax = axes.flat.next()
+    ax = axes_iter.next()
     subimg = subimage(srcpath, lng, lat, size=100)
     ax.imshow(subimg)
     ax.grid(False)
@@ -129,9 +130,9 @@ def timepointKDE(srcpaths, lng, lat, timeseries, timepoint):
     r = timeseries[:, 3]
     ir = timeseries[:, 4]
     
-    sns.kdeplot(b, r, shade=True, cut=5, ax=axes.flat.next())
-    sns.kdeplot(g, ir, shade=True, cut=5, ax=axes.flat.next())
-    sns.kdeplot(b - r, g - ir, shade=True, cut=5, ax=axes.flat.next())
+    sns.kdeplot(b, r, shade=True, cut=5, ax=axes_iter.next())
+    sns.kdeplot(g, ir, shade=True, cut=5, ax=axes_iter.next())
+    sns.kdeplot(b - r, g - ir, shade=True, cut=5, ax=axes_iter.next())
     
     plt.tight_layout()
 
