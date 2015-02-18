@@ -129,9 +129,9 @@ def timepointKDE(srcpaths, lng, lat, timeseries, timepoint):
     r = timeseries[:, 3]
     ir = timeseries[:, 4]
     
-    sns.kdeplot(blue, red, shade=True, cut=5, ax=axes_iter.next())
-    sns.kdeplot(green, ir, shade=True, cut=5, ax=axes_iter.next())
-    sns.kdeplot(blue - red, green - ir, shade=True, cut=5, ax=axes_iter.next())
+    sns.kdeplot(b, r, shade=True, cut=5, ax=axes_iter.next())
+    sns.kdeplot(g, ir, shade=True, cut=5, ax=axes_iter.next())
+    sns.kdeplot(b - r, g - ir, shade=True, cut=5, ax=axes_iter.next())
     
     plt.tight_layout()
 
