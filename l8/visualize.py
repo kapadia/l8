@@ -4,7 +4,12 @@ import numpy as np
 import rasterio as rio
 import pyproj
 from skimage.exposure import rescale_intensity
+
+import l8
 from l8 import BANDS
+
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def subimage(scene_directory, longitude, latitude, bands=[4, 3, 2], size=50):
@@ -85,3 +90,48 @@ def subimage(scene_directory, longitude, latitude, bands=[4, 3, 2], size=50):
     
     return rescale_intensity(subimg, in_range=(0, 20000), out_range=(0, 255)).astype(np.uint8)
     
+
+def timepointKDE(srcpaths, lng, lat, timeseries, timepoint):
+    """
+    
+    :param srcpaths:
+        List of Landsat scene directories.
+    
+    :param lng:
+        Longitude
+        
+    :param lat:
+        Latitude
+        
+    :param timeseries:
+        Numpy array returned by l8.timeseries.extract
+    
+    :param timepoint:
+        A date in the format YYYYDOY corresponding to a point in the timeseries.
+    
+    """
+    
+    # Sort directories by date
+    srcpaths = l8.timeseries.sort_by_date(srcpaths, accessor=lambda p: os.path.basename(os.path.normpath(p)))
+    
+    # Get the scene path corresponding to the given timepoint
+    srcpath = ''.join([srcpath for srcpath in srcpaths if timepoint in srcpath])
+    
+    f, axes = plt.subplots(2, 2)
+    
+    ax = axes.flat.next()
+    subimg = subimage(srcpath, lng, lat, size=100)
+    ax.imshow(subimg)
+    ax.grid(False)
+    
+    b = timeseries[:, 1]
+    g = timeseries[:, 2]
+    r = timeseries[:, 3]
+    ir = timeseries[:, 4]
+    
+    sns.kdeplot(blue, red, shade=True, cut=5, ax=axes_iter.next())
+    sns.kdeplot(green, ir, shade=True, cut=5, ax=axes_iter.next())
+    sns.kdeplot(blue - red, green - ir, shade=True, cut=5, ax=axes_iter.next())
+    
+    plt.tight_layout()
+
