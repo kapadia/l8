@@ -8,7 +8,7 @@ import pyproj
 from l8 import BANDS
 
 
-def extract(scene_directory, longitude, latitude, bands=[]):
+def extract(scene_directory, longitude, latitude, bands=[], neighborhood=0):
     """
     Extract pixel values at a specified geographic location.
     
@@ -49,8 +49,6 @@ def extract(scene_directory, longitude, latitude, bands=[]):
     
     src_proj = pyproj.Proj(init='epsg:4326')
     
-    print "HERE"
-    
     def get_value_from_band(scene, band):
         
         file_params = { "id": scene["id"], "bidx": band['bidx'] }
@@ -72,8 +70,8 @@ def extract(scene_directory, longitude, latitude, bands=[]):
             except ValueError:
                 return np.nan
             
-            x0, y0 = xc, yc
-            x1, y1 = xc + 1, yc + 1
+            x0, y0 = xc - neighborhood, yc - neighborhood
+            x1, y1 = xc + neighborhood + 1, yc + neighborhood + 1
             
             s0, t0 = src.ul(x0, y0)
             s1, t1 = src.ul(x1, y1)
@@ -82,7 +80,7 @@ def extract(scene_directory, longitude, latitude, bands=[]):
             smax, tmax = max(s0, s1), max(t0, t1)
             
             window = src.window(smin, tmin, smax, tmax)
-            return src.read_band(1, window=window)[0][0]
+            return np.median(src.read_band(1, window=window))
     
     
     with rio.drivers():
