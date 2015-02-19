@@ -51,7 +51,6 @@ def detect_change(directory):
             lng, lat = pyproj.transform(src_proj, dst_proj, *src.ul(j, i))
             
             # Okay, now have lng/lat to conform to requirement of timeseries
-            scene_directories, longitude, latitude, bands=[], neighborhood=0
             ts = timeseries(scene_directories, lng, lat)
             
             print ts
