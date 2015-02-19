@@ -48,6 +48,20 @@ def extract(scene_directory, longitude, latitude, bands=[], neighborhood=0):
     }
     
     src_proj = pyproj.Proj(init='epsg:4326')
+<<<<<<< Local Changes
+<<<<<<< Local Changes
+    b1path = os.path.join(scene_directory, "%s_B1.TIF")
+    with rio.open(scene_directory, b1path) as src:
+        dst_proj = pyproj.Proj(src.crs)
+        s, t = pyproj.transform(src_proj, dst_proj, longitude, latitude)
+        
+        # Get the pixel corresponding to local coordinate s/t
+        xc, yc = src.index(s, t)
+        
+        # Buffer the x/y point
+        x0, y0 = xc - neighborhood, yc - neighborhood
+        x1, y1 = xc + neighborhood + 1, yc + neighborhood + 1
+        
     
     def get_value_from_band(scene, band):
         
