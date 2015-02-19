@@ -4,18 +4,11 @@ import sys
 import numpy as np
 import rasterio as rio
 import pyproj
-from skimage.exposure import rescale_intensity
-from PIL import Image
-
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 from l8 import BANDS
 
-sns.set()
 
-
-def extract(scene_directory, longitude, latitude, bands=[], cloudmask=False):
+def extract(scene_directory, longitude, latitude, bands=[]):
     """
     Extract pixel values at a specified geographic location.
     
@@ -55,6 +48,8 @@ def extract(scene_directory, longitude, latitude, bands=[], cloudmask=False):
     }
     
     src_proj = pyproj.Proj(init='epsg:4326')
+    
+    print "HERE"
     
     def get_value_from_band(scene, band):
         
