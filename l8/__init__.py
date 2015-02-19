@@ -1,19 +1,21 @@
 
 __version__ = '0.1.0'
 
-BANDS = {
-    "Coastal aerosol": 1,
-    "Blue": 2,
-    "Green": 3,
-    "Red": 4,
-    "NIR": 5,
-    "SWIR 1": 6,
-    "SWIR 2": 7,
-    "Panchromatic": 8,
-    "Cirrus": 9,
-    "TIRS 1": 10,
-    "TIRS 2": 11
-}
+
+BANDS = [
+    { "name": "Coastal aerosol", "bidx": 1 },
+    { "name": "Blue", "bidx": 2 },
+    { "name": "Green", "bidx": 3 },
+    { "name": "Red", "bidx": 4 },
+    { "name": "NIR", "bidx": 5 },
+    { "name": "SWIR 1", "bidx": 6 },
+    { "name": "SWIR 2", "bidx": 7 },
+    { "name": "Panchromatic", "bidx": 8 },
+    { "name": "Cirrus", "bidx": 9 },
+    { "name": "TIRS 1", "bidx": 10 },
+    { "name": "TIRS 2", "bidx": 11 },
+    { "name": "BQA", "bidx": "QA" },
+]
 
 SCENE_ID_PATTERN = "[A-Z]{2}8(?P<path>[0-9]{3})(?P<row>[0-9]{3})(?P<year>[0-9]{4})(?P<doy>[0-9]{3})[A-Z]{3}[0-9]{2}"
 
