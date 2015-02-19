@@ -29,7 +29,7 @@ def sort_by_date(items, accessor=None):
     return sorted(items, key=key)
 
 
-def extract(scene_directories, longitude, latitude, bands=[]):
+def extract(scene_directories, longitude, latitude, bands=[], neighborhood=0):
     """
     Extract values from a list of scene directories at a specified location.
     
@@ -86,7 +86,7 @@ def extract(scene_directories, longitude, latitude, bands=[]):
     ts = []
     for scene in scenes:
         ts.append(
-            spectrum.extract(scene["directory"], longitude, latitude, bands=bands)
+            spectrum.extract(scene["directory"], longitude, latitude, bands=bands, neighborhood=neighborhood)
         )
     
     return (dates, np.array(ts))
