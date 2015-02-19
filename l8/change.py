@@ -5,6 +5,7 @@
 # Given a stack of L8 scenes in a parent directory,
 # analyze the stack of pixels for changes in (blue - red) vs (green - nir)
 
+import os
 import pyproj
 import rasterio as rio
 
