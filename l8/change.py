@@ -35,7 +35,7 @@ def detect_change(directory):
     
     dst_proj = pyproj.Proj(init='epsg:4326')
     
-    sceneids = filter(lambda sid: re.match(l8.SCENE_ID_PATTERN, sid), os.listdir(directory))
+    sceneids = filter(lambda sid: re.match(SCENE_ID_PATTERN, sid), os.listdir(directory))
     sceneids = timeseries.sort_by_date(sceneids)
     
     srcdirs = map(lambda d: os.path.join(directory, d), sceneids)
@@ -61,7 +61,7 @@ def detect_change(directory):
         for srcdir in srcdirs[20:]:
             
             sid = os.path.basename(os.path.normpath(srcdir))
-            date = str(l8.get_date(sid))
+            date = str(get_date(sid))
             
             with rio.open("%s.tif" % date, 'w', **metadata) as dst:
                 pass
@@ -104,7 +104,7 @@ def detect_change(directory):
             for idx, srcdir in enumerate(srcdirs[20:]):
                 
                 sid = os.path.basename(os.path.normpath(srcdir))
-                date = str(l8.get_date(sid))
+                date = str(get_date(sid))
             
                 with rio.open("%s.tif" % date, 'r+') as dst:
                     value = values[idx]
