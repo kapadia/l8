@@ -73,7 +73,7 @@ def detect_change(directory):
             lng, lat = pyproj.transform(src_proj, dst_proj, *src.ul(j, i))
             
             # Okay, now have lng/lat to conform to requirement of timeseries
-            ts = timeseries.extract(scene_directories, lng, lat)
+            ts = timeseries.extract(srcdirs, lng, lat)
             kde = KernelDensity(kernel='gaussian', bandwidth=1.0, algorithm='ball_tree')
             
             # For now we just look at b-r vs. g-ir
