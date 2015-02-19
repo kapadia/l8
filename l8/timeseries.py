@@ -66,7 +66,7 @@ def extract(scene_directories, longitude, latitude, bands=[]):
     scene_directories = filter(is_scene_directory, scene_directories)
     
     if len(bands) == 0:
-        bands = BANDS.keys()
+        bands = map(lambda d: d['name'], BANDS)
     
     # Get scene ids from scene directories
     scene_ids = map(lambda x: os.path.basename(os.path.normpath(x)), scene_directories)
