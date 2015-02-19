@@ -8,7 +8,7 @@ import pyproj
 from l8 import BANDS
 
 
-def extract(scene_directory, longitude, latitude, bands=[], neighborhood=0):
+def extract(scene_directory, longitude, latitude, neighborhood=0):
     """
     Extract pixel values at a specified geographic location.
     
@@ -32,15 +32,8 @@ def extract(scene_directory, longitude, latitude, bands=[], neighborhood=0):
     
     :param latitude:
         The latitude to sample in each image.
-        
-    :param bands:
-        The band(s) for which the timeseries will be extracted. Default is
-        an empty list representing all bands.
     
     """
-    
-    if len(bands) == 0:
-        bands = map(lambda d: d['name'], BANDS)
     
     scene = {
         "directory": scene_directory,
