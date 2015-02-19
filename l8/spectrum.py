@@ -15,7 +15,7 @@ from l8 import BANDS
 sns.set()
 
 
-def extract(scene_directory, longitude, latitude, bands=[], imgpath=None):
+def extract(scene_directory, longitude, latitude, bands=[], cloudmask=False):
     """
     Extract pixel values at a specified geographic location.
     
@@ -44,14 +44,10 @@ def extract(scene_directory, longitude, latitude, bands=[], imgpath=None):
         The band(s) for which the timeseries will be extracted. Default is
         an empty list representing all bands.
     
-    :param imgpath:
-        Path to an output image of a 101x101 patch surrounding the given longitude/latitude.
     """
     
     if len(bands) == 0:
-        bands = BANDS.keys()
-    
-    padding = 50 if imgpath else 0
+        bands = map(lambda d: d['name'], BANDS)
     
     scene = {
         "directory": scene_directory,
@@ -62,7 +58,7 @@ def extract(scene_directory, longitude, latitude, bands=[], imgpath=None):
     
     def get_value_from_band(scene, band):
         
-        file_params = { "id": scene["id"], "bidx": BANDS[band] }
+        file_params = { "id": scene["id"], "bidx": band['bidx'] }
         srcpath = os.path.join(
             scene["directory"], "%(id)s_B%(bidx)s.TIF" % file_params
         )
@@ -81,8 +77,8 @@ def extract(scene_directory, longitude, latitude, bands=[], imgpath=None):
             except ValueError:
                 return np.nan
             
-            x0, y0 = xc - padding, yc - padding
-            x1, y1 = xc + padding + 1, yc + padding + 1
+            x0, y0 = xc, yc
+            x1, y1 = xc + 1, yc + 1
             
             s0, t0 = src.ul(x0, y0)
             s1, t1 = src.ul(x1, y1)
@@ -91,29 +87,9 @@ def extract(scene_directory, longitude, latitude, bands=[], imgpath=None):
             smax, tmax = max(s0, s1), max(t0, t1)
             
             window = src.window(smin, tmin, smax, tmax)
-            band = src.read_band(1, window=window)
-            
-            return band
-        
+            return src.read_band(1, window=window)[0][0]
+    
+    
     with rio.drivers():
-        
-        spectral_images = map(lambda band: get_value_from_band(scene, band), bands)
-        
-        # Create image plots for the patch surrounding the given coordinates
-        if imgpath:
-            ridx = bands.index("Red")
-            gidx = bands.index("Green")
-            bidx = bands.index("Blue")
-            r, g, b = spectral_images[ridx], spectral_images[gidx], spectral_images[bidx]
-            
-            img = rescale_intensity(
-                np.dstack((r, g, b)),
-                in_range=(0, 20000),
-                out_range=(0, 255)
-            ).astype(np.uint8)
-            
-            im = Image.fromarray(img)
-            im.save(imgpath)
-        
-        spectral_values = map(lambda img: img[padding][padding], spectral_images)
+        spectral_values = np.array(map(lambda band: get_value_from_band(scene, band), BANDS))
         return spectral_values
