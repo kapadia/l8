@@ -4,6 +4,7 @@ import sys
 import numpy as np
 import rasterio as rio
 import pyproj
+from scipy.ndimage.interpolation import zoom
 
 from l8 import BANDS, BAND_INDEX, get_sceneid_from_directory
 
@@ -58,6 +59,6 @@ def get(scene_directory, window, bands=map(lambda x: x['name'], BANDS)):
         
         srcpath = os.path.join(scene_directory, "%s_B%s.TIF" % (sceneid, bidx))
         arr = get_pixels(srcpath, window)
-        spectrum.append(arr)
+        spectrum.append(zoom(arr, 0.20))
     
     return np.dstack(spectrum)
