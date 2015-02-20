@@ -54,7 +54,7 @@ def get(scene_directories, window, bands=None):
     ts = []
     for scene_directory in scene_directories:
         ts.append(
-            spectrum.extract(scene_directory, bands, window)
+            spectrum.get(scene_directory, window, bands)
         )
     
     return (dates, np.array(ts))
@@ -110,7 +110,7 @@ def extract(scene_directories, longitude, latitude, neighborhood=0):
     ts = []
     for scene in scenes:
         ts.append(
-            spectrum.extract(scene["directory"], longitude, latitude, neighborhood=neighborhood)
+            spectrum.get(scene["directory"], longitude, latitude, neighborhood=neighborhood)
         )
     
     return (dates, np.array(ts))
