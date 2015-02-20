@@ -16,11 +16,30 @@ def get(scene_directory, window, bands=map(lambda x: x['name'], BANDS)):
     values from the BQA.
     
     :param scene_directories:
+    
+    List of paths pointing to Landsat 8 directories. Each path
+    is assumed to be composed of a Landsat8 scene id.
+    
+    LXSPPPRRRYYYYDDDGSIVV
+    L = Landsat
+    X = Sensor
+    S = Satellite
+    PPP = WRS path
+    RRR = WRS row
+    YYYY = Year
+    DDD = Julian day of year
+    GSI = Ground station identifier
+    VV = Archive version number
+    
     :param window:
         
         ( (ulx, uly), (lrx, lry) ) format in the image's coordinate system.
-        
+    
     :param bands:
+    
+        List of bands to extract. Bands should be specified by their name:
+        
+        Coastal aerosol, Blue, Green, Red, NIR, SWIR 1, SWIR 2, Panchromatic, Cirrus, TIRS 1, TIRS 2, BQA
     """
     
     ((ulx, uly), (lrx, lry)) = window
