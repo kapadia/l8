@@ -8,7 +8,7 @@ import pyproj
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from l8 import BANDS, SCENE_ID_PATTERN, get_date, spectrum
+from l8 import BANDS, SCENE_ID_PATTERN, get_date, spectrum, get_sceneid_from_directory
 
 sns.set()
 
@@ -25,8 +25,39 @@ def sort_by_date(items, accessor=None):
     else:
         key=get_date
     
-    
     return sorted(items, key=key)
+
+
+def is_scene_directory(srcpath):
+    sid = os.path.basename(os.path.normpath(srcpath))
+    return re.match(SCENE_ID_PATTERN, sid) is not None
+
+
+def get(scene_directories, window, bands=None):
+    """
+    
+    :param scene_directories:
+    :param window:
+    :param bands:
+    """
+    
+    # Filter out directories that do not appear to be a scene directory
+    scene_directories = filter(is_scene_directory, scene_directories)
+    
+    # Sort directories by date
+    scene_directories = sort_by_date(scene_directories, accessor=get_sceneid_from_directory)
+    
+    # Get a sorted list of dates
+    sceneids = map(get_sceneid_from_directory, scene_directories)
+    dates = map(get_date, sceneids)
+    
+    ts = []
+    for scene_directory in scene_directories:
+        ts.append(
+            spectrum.extract(scene_directory, bands, window)
+        )
+    
+    return (dates, np.array(ts))
 
 
 def extract(scene_directories, longitude, latitude, neighborhood=0):
@@ -58,10 +89,6 @@ def extract(scene_directories, longitude, latitude, neighborhood=0):
         The band(s) for which the timeseries will be extracted. Default is
         an empty list representing all bands.
     """
-    
-    def is_scene_directory(srcpath):
-        sid = os.path.basename(os.path.normpath(srcpath))
-        return re.match(SCENE_ID_PATTERN, sid) is not None
     
     scene_directories = filter(is_scene_directory, scene_directories)
     

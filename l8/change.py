@@ -18,7 +18,7 @@ from l8 import timeseries
 
 
 # Empirically found for demo.
-log_probability_threshold = -3000000
+log_probability_threshold = -3000000.0
 
 
 def is_scene_directory(srcpath):
