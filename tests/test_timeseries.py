@@ -84,9 +84,11 @@ def test_sort_by_date_with_list_of_items():
 
 def test_timeseries():
     
+    datadir = os.path.join(os.path.dirname(__file__), 'fixtures')
+    
+    expected_ts = np.load(os.path.join(datadir, 'ts.npy'))
     expected_dates = [2013115, 2014086]
     
-    datadir = os.path.join(os.path.dirname(__file__), 'fixtures')
     directories = map(lambda p: os.path.join(datadir, p), os.listdir(datadir))
     
     ulx, uly = 750435.000, 4309965.000
@@ -95,27 +97,5 @@ def test_timeseries():
     
     dates, ts = timeseries.get(directories, window, bands=['Coastal aerosol', 'Blue'])
     
-    print type(ts)
-    
     assert expected_dates == dates
-    assert False
-
-# def test_timeseries():
-#
-#     lng = -120.10872499999999
-#     lat = 38.90009722222222
-#
-#     expected_dates = np.array([2013115, 2014086])
-#     expected_ts = np.array([
-#         [32642, 34062, 34807, 35822, 32081, 5855, 5626, 28332, 5104, 20070, 20473, 23552],
-#         [35895, 37562, 36769, 39184, 42101, 11218, 11152, 33318, 5401, 15506, 14776, 20480]
-#     ])
-#
-#     data_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
-#     scene_dirs = map(lambda d: os.path.join(data_dir, d), os.listdir(data_dir))
-#
-#     dates, ts = timeseries.extract(scene_dirs, lng, lat)
-#
-#     assert np.array_equal(dates, expected_dates)
-#     assert np.array_equal(ts, expected_ts)
-    
+    assert np.array_equal(expected_ts, ts)
