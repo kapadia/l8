@@ -108,6 +108,6 @@ def detect_change(directory):
                 date = str(get_date(sid))
             
                 with rio.open("%s.tif" % date, 'r+') as dst:
-                    value = values[idx]
+                    value = np.array( [[ values[idx] ]])
                     dst.write_band(1, value, window=window)
 
