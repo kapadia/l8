@@ -109,5 +109,5 @@ def detect_change(directory):
             
                 with rio.open("%s.tif" % date, 'r+') as dst:
                     value = values[idx]
-                    src.write_band(1, value, window=window)
+                    dst.write_band(1, value, window=window)
 
