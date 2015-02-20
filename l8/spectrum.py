@@ -33,7 +33,7 @@ def get(scene_directory, window, bands=map(lambda x: x['name'], BANDS)):
     
     :param window:
         
-        ( (ulx, uly), (lrx, lry) ) format in the image's coordinate system.
+        ((row_start, row_stop), (col_start, col_stop))
     
     :param bands:
     
@@ -42,22 +42,13 @@ def get(scene_directory, window, bands=map(lambda x: x['name'], BANDS)):
         Coastal aerosol, Blue, Green, Red, NIR, SWIR 1, SWIR 2, Panchromatic, Cirrus, TIRS 1, TIRS 2, BQA
     """
     
-    ((ulx, uly), (lrx, lry)) = window
     sceneid = get_sceneid_from_directory(scene_directory)
     
     def get_pixels(srcpath, window):
         
         with rio.drivers():
             with rio.open(srcpath, 'r') as src:
-                
-                y0, x0 = src.index(ulx, uly)
-                y1, x1 = src.index(lrx, lry)
-                
-                xmin, xmax = min(x0, x1), max(x0, x1)
-                ymin, ymax = min(y0, y1), max(y0, y1)
-                
-                window = ((ymin, ymax), (xmin, xmax))
-                arr = src.read_band(1, window=((ymin, ymax), (xmin, xmax)))
+                arr = src.read_band(1, window=window)
         
         return arr
     
