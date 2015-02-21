@@ -41,3 +41,7 @@ def get_date(sceneid):
 
 def get_sceneid_from_directory(scene_directory):
     return os.path.basename(os.path.normpath(scene_directory))
+    
+def is_scene_directory(srcpath):
+    sid = os.path.basename(os.path.normpath(srcpath))
+    return re.match(SCENE_ID_PATTERN, sid) is not None
