@@ -13,7 +13,7 @@ import rasterio as rio
 
 from sklearn.neighbors import KernelDensity
 
-from l8 import BANDS, SCENE_ID_PATTERN, get_date, spectrum
+from l8 import BANDS, SCENE_ID_PATTERN, get_date, spectrum, is_scene_directory
 from l8 import timeseries
 
 
@@ -21,15 +21,13 @@ from l8 import timeseries
 log_probability_threshold = -3000000.0
 
 
-def is_scene_directory(srcpath):
-    sid = os.path.basename(os.path.normpath(srcpath))
-    return re.match(SCENE_ID_PATTERN, sid) is not None
 
-
-def detect_change(directory):
+def detect(directory):
     """
+    
     :param directory:
         Parent directory containing various L8 scenes corresponding to the same path/row.
+    
     """
     
     # Iterate over all pixels in image. Ugh ...
