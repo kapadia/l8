@@ -52,7 +52,10 @@ def download(sceneid, dstpath, bands):
 @click.argument('srcpath', type=click.Path(exists=True))
 @click.argument('dstpath')
 def cloudmask(srcpath, dstpath):
-    l8cloudmask.get_from_level1(srcpath, dstpath)
+    from l8 import cloudmask
+    
+    cloudmask.get_from_level1(srcpath, dstpath)
+
 
 @click.command('cfmask')
 @click.argument('srcpath', type=click.Path(exists=True))
@@ -82,3 +85,4 @@ l8.add_command(histogram)
 l8.add_command(download)
 l8.add_command(cfmask)
 l8.add_command(mapbox)
+l8.add_command(cloudmask)
